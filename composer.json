@@ -8,11 +8,27 @@
             "Jigius\\Tokenizer\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {"Jigius\\Tokenizer\\Test\\": "test/"}
+    },
     "authors": [
         {
             "name": "jigius",
             "email": "jigius@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "jigius/acc-core": "dev-ref@1"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:jigius/acc-core.git"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "symfony/var-dumper": "5.4.x-dev",
+        "phpunit/phpunit": "9.5.x-dev"
+    }
 }
