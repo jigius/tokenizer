@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Tokenizer\Preprocessor\Vanilla;
+namespace Jigius\Tokenizer\Preprocessor\Vanilla;
 
 use Acc\Core\PrinterInterface;
 use LogicException;
 
 /**
  * Class VanillaTkn
- * @package Tokenizer\Preprocessor\Vanilla
+ * @package Jigius\Tokenizer\Preprocessor\Vanilla
  */
 final class VanillaTkn implements VanillaTknInterface
 {
@@ -21,13 +21,14 @@ final class VanillaTkn implements VanillaTknInterface
      * VanillaTkn constructor.
      * @param bool $isSeparator
      */
-    public function __construct(bool $isSeparator = false)
+    public function __construct(bool $isSeparator = false, string $escapeChr = "\\")
     {
         $this->i = [
             'input' => null,
             'startedAt' => null,
             'finishedAt' => null,
-            'separator' => $isSeparator
+            'separator' => $isSeparator,
+            'escChr' => $escapeChr
         ];
     }
 
@@ -37,7 +38,7 @@ final class VanillaTkn implements VanillaTknInterface
     public function printed(PrinterInterface $printer)
     {
         array_walk(
-            $printer,
+            $this->i,
             function ($val, string $key) use (&$printer): void {
                 $printer = $printer->with($key, $val);
             }
@@ -52,13 +53,20 @@ final class VanillaTkn implements VanillaTknInterface
     public function token(): string
     {
         if (
-            !isset($this->input['input']) ||
-            !isset($this->input['startedAt']) ||
-            !isset($this->input['finishedAt'])
+            !isset($this->i['input']) ||
+            !isset($this->i['startedAt']) ||
+            !isset($this->i['finishedAt'])
         ) {
             throw new LogicException("all mandatory params are not defined");
         }
-        return mb_substr($this->i['input'], $this->i['startedAt'], $this->i['finishedAt']);
+        return
+            stripslashes(
+                mb_substr(
+                    $this->i['input'],
+                    $this->i['startedAt'],
+                    ($this->i['finishedAt'] - $this->i['startedAt']) + 1
+                )
+            );
     }
 
     /**
@@ -74,7 +82,7 @@ final class VanillaTkn implements VanillaTknInterface
     /**
      * @inheritDoc
      */
-    public function withStartedAt(string $pos): self
+    public function withStartedAt(int $pos): self
     {
         $that = $this->blueprinted();
         $that->i['startedAt'] = $pos;
@@ -84,7 +92,7 @@ final class VanillaTkn implements VanillaTknInterface
     /**
      * @inheritDoc
      */
-    public function withFinishedAt(string $pos): self
+    public function withFinishedAt(int $pos): self
     {
         $that = $this->blueprinted();
         $that->i['finishedAt'] = $pos;

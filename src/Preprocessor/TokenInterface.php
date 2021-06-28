@@ -1,10 +1,18 @@
 <?php
+declare(strict_types=1);
 
+namespace Jigius\Tokenizer\Preprocessor;
 
-namespace Tokenizer\Preprocessor;
+use Acc\Core\MediaInterface;
 
-
-interface TokenInterface
+/**
+ * Interface TokenInterface
+ * @package Jigius\Tokenizer\Preprocessor
+ */
+interface TokenInterface extends MediaInterface
 {
-
+    /**
+     * @return string
+     */
+    public function token(): string;
 }

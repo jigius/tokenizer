@@ -1,27 +1,31 @@
 <?php
+declare(strict_types=1);
 
+namespace Jigius\Tokenizer\Preprocessor\Vanilla;
 
-namespace Tokenizer\Preprocessor\Vanilla;
+use Jigius\Tokenizer\Preprocessor\TokenInterface;
 
-
-use Acc\Core\PrinterInterface;
-
-class VanillaTknInterface implements \Tokenizer\Preprocessor\TokenInterface
+/**
+ * Interface VanillaTknInterface
+ * @package Jigius\Tokenizer\Preprocessor\Vanilla
+ */
+interface VanillaTknInterface extends  TokenInterface
 {
+    /**
+     * @param string $txt
+     * @return VanillaTknInterface
+     */
+    public function withInput(string &$txt): VanillaTknInterface;
 
     /**
-     * @inheritDoc
+     * @param int $pos
+     * @return VanillaTknInterface
      */
-    public function printed(PrinterInterface $printer)
-    {
-        // TODO: Implement printed() method.
-    }
+    public function withStartedAt(int $pos): VanillaTknInterface;
 
     /**
-     * @inheritDoc
+     * @param int $pos
+     * @return VanillaTknInterface
      */
-    public function token(): string
-    {
-        // TODO: Implement token() method.
-    }
+    public function withFinishedAt(int $pos): VanillaTknInterface;
 }
